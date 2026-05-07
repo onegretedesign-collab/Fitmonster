@@ -21,19 +21,12 @@ export default function AuthScreen() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md flex flex-col items-center text-center"
       >
-        <div className="mb-8">
-          <div className="p-5 bg-monster-green rounded-full shadow-[0_0_40px_rgba(204,255,0,0.3)] inline-block">
-            <Dumbbell className="w-12 h-12 text-monster-black" />
-          </div>
-        </div>
-
-        <h1 className="monster-heading text-6xl md:text-7xl mb-3">
-          FIT <span className="text-monster-green italic">MONSTER</span>
-        </h1>
-        
-        <p className="text-white/20 mb-12 max-w-xs font-black uppercase text-[10px] tracking-[0.3em]">
-          ALTA PERFORMANCE PARA O CORPO DE ELITE
-        </p>
+        <img 
+          src="https://i.postimg.cc/brGDnwrF/LOGO-FIT-MONSTER-TRAINING-02.png" 
+          alt="Fit Monster Training" 
+          className="w-full max-w-[320px] mb-12 drop-shadow-[0_0_30px_rgba(204,255,0,0.2)]"
+          referrerPolicy="no-referrer"
+        />
 
         <div className="w-full flex justify-center">
           <button
