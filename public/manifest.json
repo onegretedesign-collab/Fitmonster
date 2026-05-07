@@ -1,0 +1,17 @@
+{
+  "name": "Monster Gym - Força Extrema",
+  "short_name": "Monster Gym",
+  "description": "O companheiro definitivo para seu treino de força e cardio.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#CCFF00",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/isometric/512/dumbbell.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
