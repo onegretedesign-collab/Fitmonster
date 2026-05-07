@@ -3,8 +3,6 @@
  * Camada de abstração para comunicação com Health Connect (Android) ou Google Fit (Web/Cloud)
  */
 
-import { getGoogleFitExerciseType } from './exerciseMapper';
-
 export enum SyncStatus {
   NOT_CONNECTED = 'NOT_CONNECTED',
   CONNECTING = 'CONNECTING',
@@ -46,46 +44,21 @@ class HealthIntegrationService {
     console.log('Solicitando conexão com Health Connect...');
     
     if (this.isNativeSupportAvailable()) {
+      // Simulação de chamada para bridge nativa
+      // return await window.AndroidHealthConnect.requestPermissions();
       return SyncStatus.CONNECTED;
     }
 
+    // Fallback para Web (Simulação ou Google Fit REST API)
     return new Promise((resolve) => {
       setTimeout(() => resolve(SyncStatus.CONNECTED), 1500);
     });
   }
 
   /**
-   * Sincroniza um treino customizado, mapeando os nomes dos exercícios
-   * usuais para os tipos oficiais do Google Fit.
+   * Sincroniza um treino de musculação com o Google Fit / Health Connect.
+   * Utiliza um identificador único para evitar duplicação e aplica override de calorias.
    */
-  public async syncCustomWorkout(workout: {
-    id: string;
-    title: string;
-    exercises: string[]; // Lista de nomes como 'Supino Reto', 'Leg Press'
-    durationMinutes: number;
-    caloriesBurned: number;
-    startTime: Date;
-    endTime: Date;
-  }): Promise<boolean> {
-    // Mapeia os exercícios para os tipos do Google
-    const mappedExTypes = workout.exercises.map(ex => getGoogleFitExerciseType(ex));
-    
-    console.log('--- SYNC CUSTOM WORKOUT ---');
-    console.log(`Title: ${workout.title}`);
-    console.log(`Idempotency ID: monster_gym_${workout.id}`);
-    console.log('Mapped Exercise Types for Google Fit:', mappedExTypes);
-    
-    // Na Bridge Nativa:
-    // NativeBridge.insertStrengthSession(
-    //    workout.startTime, 
-    //    workout.endTime, 
-    //    mappedExTypes, 
-    //    workout.caloriesBurned
-    // );
-    
-    return true;
-  }
-
   public async syncStrengthWorkout(session: {
     id: string;
     title: string;
@@ -94,15 +67,17 @@ class HealthIntegrationService {
     startTime: Date;
     endTime: Date;
   }): Promise<boolean> {
-    console.log('Syncing Strength Workout with Idempotency ID:', `monster_gym_${session.id}`);
+    const syncId = `fit_monster_session_${session.id}`;
+    console.log('Syncing Strength Workout with Idempotency ID:', syncId);
+    console.log('Applying Manual Calories Override:', session.caloriesBurned);
     
     // Na Bridge Nativa Android, isso chamaria o StrengthWorkoutRepository.saveWeightliftingSession()
-    // simulando uma chamada de bridge assíncrona
+    // passando o 'syncId' para o Metadata.clientRecordId
     return new Promise((resolve) => {
       setTimeout(() => {
-        console.log(`[Health Connect] Treino "${session.title}" sincronizado com sucesso.`);
+        console.log(`[Health Connect] Treino "${session.title}" (${session.caloriesBurned} kcal) sincronizado.`);
         resolve(true);
-      }, 1000);
+      }, 1500);
     });
   }
 

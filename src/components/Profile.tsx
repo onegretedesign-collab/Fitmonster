@@ -27,7 +27,7 @@ export default function Profile({ user, profile }: ProfileProps) {
   const testNotification = () => {
     if (Notification.permission === 'granted') {
       const randomMessage = MOTIVATIONAL_MESSAGES[Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length)];
-      new Notification("Monster Training", {
+      new Notification("Fit Monster", {
         body: randomMessage,
         icon: '/favicon.ico'
       });

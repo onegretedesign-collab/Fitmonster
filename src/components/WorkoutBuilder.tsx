@@ -210,7 +210,7 @@ export default function WorkoutBuilder({ user }: WorkoutBuilderProps) {
       {isCreating ? (
         <Card className="monster-card space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="font-black italic uppercase">{editingId ? 'Editar Treino Monster' : 'Novo Treino Monster'}</h3>
+            <h3 className="font-black italic uppercase">{editingId ? 'Editar Treino Fit Monster' : 'Novo Treino Fit Monster'}</h3>
             <button onClick={resetForm} className="text-white/40"><X /></button>
           </div>
 

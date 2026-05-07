@@ -21,7 +21,7 @@ const goalContent: any = {
     muscleGroups: ['Corpo Todo', 'Pernas', 'HIIT/Cardio']
   },
   'Ganho de Músculo': {
-    title: 'Hipertrofia Monster',
+    title: 'Hipertrofia Fit Monster',
     desc: 'Foco em tensão mecânica e estresse metabólico para crescimento máximo.',
     tips: ['Controle a descida do peso (excêntrica)', 'Busque a falha técnica', 'Descanse 60-90s entre séries'],
     muscleGroups: ['Peito', 'Costas', 'Braços', 'Ombros']

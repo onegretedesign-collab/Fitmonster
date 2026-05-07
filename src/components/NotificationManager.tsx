@@ -61,7 +61,7 @@ export default function NotificationManager({ user }: NotificationManagerProps) 
 
         if (isToday && isTime) {
           // Trigger browser notification
-          new Notification(session.workoutTitle || 'Treino Monster', {
+          new Notification(session.workoutTitle || 'Treino Fit Monster', {
             body: session.reminderMessage || 'Bora treinar, Monstro!',
             icon: '/favicon.ico'
           });
@@ -69,7 +69,7 @@ export default function NotificationManager({ user }: NotificationManagerProps) 
           // Show in-app toast too
           setLastMessage({
             notification: {
-              title: session.workoutTitle || 'Treino Monster',
+              title: session.workoutTitle || 'Treino Fit Monster',
               body: session.reminderMessage || 'Bora treinar, Monstro!'
             }
           });

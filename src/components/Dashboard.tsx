@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { User } from 'firebase/auth';
 import { db, handleFirestoreError, OperationType } from '../lib/firebase';
 import { collection, query, where, onSnapshot, orderBy, deleteDoc, doc, getDoc } from 'firebase/firestore';
-import { motion, AnimatePresence } from 'motion/react';
-import { Activity, Flame, Clock, ChevronRight, Play, Trophy, TrendingUp, Repeat, X, Trash2, RotateCcw, Smartphone, Download } from 'lucide-react';
+import { motion } from 'motion/react';
+import { Activity, Flame, Clock, ChevronRight, Play, Trophy, TrendingUp, Repeat, X, Trash2, RotateCcw } from 'lucide-react';
 import { Card } from './ui/card';
 import { 
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, 
@@ -11,7 +11,6 @@ import {
 } from 'recharts';
 import WorkoutPlayer from './WorkoutPlayer';
 import GoalDetails from './GoalDetails';
-import { usePWAInstall } from '../hooks/usePWA';
 
 interface DashboardProps {
   user: User;
@@ -19,8 +18,6 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ user, profile }: DashboardProps) {
-  const { canInstall, install } = usePWAInstall();
-  const [showInstallBanner, setShowInstallBanner] = useState(true);
   const [recentWorkouts, setRecentWorkouts] = useState<any[]>([]);
   const [todayWorkout, setTodayWorkout] = useState<any>(null);
   const [customWorkout, setCustomWorkout] = useState<any>(null);
@@ -200,44 +197,6 @@ export default function Dashboard({ user, profile }: DashboardProps) {
         </div>
       </div>
 
-      {/* PWA Install Banner */}
-      <AnimatePresence>
-        {canInstall && showInstallBanner && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden"
-          >
-            <Card className="monster-card bg-monster-green p-4 border-none flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-monster-black p-2 rounded-xl">
-                  <Smartphone className="w-5 h-5 text-monster-green" />
-                </div>
-                <div>
-                  <h4 className="text-monster-black font-black text-sm uppercase leading-tight text-left">Instale o App</h4>
-                  <p className="text-monster-black/60 text-[8px] font-black uppercase tracking-widest text-left">Acesse mais rápido da sua tela inicial</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <button 
-                  onClick={install}
-                  className="bg-monster-black text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 whitespace-nowrap"
-                >
-                  <Download className="w-3 h-3" /> INSTALAR
-                </button>
-                <button 
-                  onClick={() => setShowInstallBanner(false)}
-                  className="text-monster-black/40 hover:text-monster-black transition-colors shrink-0"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </Card>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Stats Grid */}
       <div className="grid grid-cols-3 gap-3">
         {stats.map((stat) => (
@@ -255,7 +214,7 @@ export default function Dashboard({ user, profile }: DashboardProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-1.5 h-6 bg-monster-green rounded-full" />
-            <h3 className="monster-heading text-2xl tracking-tight">ANALÍTICA <span className="text-monster-green">MONSTER</span></h3>
+            <h3 className="monster-heading text-2xl tracking-tight">ANALÍTICA <span className="text-monster-green">FIT MONSTER</span></h3>
           </div>
         </div>
 

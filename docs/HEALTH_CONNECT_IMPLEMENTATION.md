@@ -191,7 +191,16 @@ class StrengthWorkoutRepository(private val healthConnectClient: HealthConnectCl
 
 ---
 
-## 7. O Diferencial dos Grandes Apps
+### 4. O Diferencial dos Grandes Apps
+
+### Segmentação por Exercício
+Em vez de registrar apenas "1 hora de academia", os apps de elite registram "Sessão de Musculação" e, dentro dela, segmentos. O Health Connect permite associar metadados específicos de cada exercício. No Android, você pode usar `ExerciseSegment` dentro da sessão.
+
+### Cálculo de Calorias Próprio
+O Google Fit/Health Connect nem sempre calcula bem as calorias de musculação. O Fit Monster calcula isso baseado no volume (séries x reps x carga). Sempre envie o valor calculado pelo app como um dado manual (Override), garantindo que sua lógica seja a fonte da verdade.
+
+### Modo Offline e Idempotência
+Garanta que, se o aluno terminar o treino sem sinal, o app armazene o treino localmente. No Health Connect, sempre use o `clientRecordId` (Ex: `monster_session_$DOC_ID`) para que mesmo em múltiplas tentativas de sincronização, o dado nunca seja duplicado no ecossistema do Google.
 
 ### Sincronização em Background (WorkManager)
 Não chame a sincronização diretamente da UI para processos longos. Use um `CoroutineWorker`:
