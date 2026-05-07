@@ -1,0 +1,99 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User profile and health targets",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "name": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "weightInitial": { "type": "number" },
+        "height": { "type": "number" },
+        "targetWeight": { "type": "number" },
+        "glycemicTarget": { "type": "number" },
+        "onboardingComplete": { "type": "boolean" },
+        "goal": { "type": "string", "enum": ["Perda de Peso", "Ganho de Músculo", "HIIT/Cardio", "Força"] },
+        "level": { "type": "string", "enum": ["Iniciante", "Intermediário", "Avançado"] },
+        "daysPerWeek": { "type": "number" },
+        "focus": { "type": "array", "items": { "type": "string" } },
+        "fcmToken": { "type": "string", "description": "Token for push notifications" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Workout": {
+      "title": "Workout Template",
+      "description": "A custom workout created by the user",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "title": { "type": "string" },
+        "muscleGroup": { "type": "string", "enum": ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core", "Full Body"] },
+        "warmups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "sets": { "type": "number" },
+              "reps": { "type": "number" },
+              "restTime": { "type": "number", "description": "Rest time in seconds between sets" }
+            }
+          }
+        },
+        "exercises": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "sets": { "type": "number" },
+              "reps": { "type": "number" },
+              "weight": { "type": "number" },
+              "duration": { "type": "number", "description": "Duration in seconds (optional)" },
+              "restTime": { "type": "number", "description": "Rest time in seconds between sets" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "title", "muscleGroup"]
+    },
+    "HealthLog": {
+      "title": "Health Log",
+      "description": "Daily health measurements",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "weight": { "type": "number" },
+        "glucose": { "type": "number" },
+        "date": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "date"]
+    },
+    "TrainingSession": {
+      "title": "Training Session",
+      "description": "A completed or scheduled training session",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "workoutId": { "type": "string" },
+        "workoutTitle": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "durationMinutes": { "type": "number" },
+        "caloriesBurned": { "type": "number" },
+        "completed": { "type": "boolean" },
+        "reminderTime": { "type": "string", "format": "time", "description": "Scheduled time for the workout reminder (HH:mm)" },
+        "reminderMessage": { "type": "string", "description": "Custom reminder message" }
+      },
+      "required": ["uid", "workoutId", "date"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "User profiles" },
+    "/workouts/{workoutId}": { "schema": "Workout", "description": "User custom workouts" },
+    "/health_logs/{logId}": { "schema": "HealthLog", "description": "Health measurement history" },
+    "/training_sessions/{sessionId}": { "schema": "TrainingSession", "description": "Workout history and schedule" }
+  }
+}

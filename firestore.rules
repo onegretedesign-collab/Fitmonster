@@ -1,0 +1,100 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    // Collection: users
+    // Fields: uid, email, name, photoURL, weightInitial, height, targetWeight, glycemicTarget
+    //
+    // Collection: workouts
+    // Fields: uid, title, muscleGroup, exercises, createdAt
+    //
+    // Collection: health_logs
+    // Fields: uid, weight, glucose, date
+    //
+    // Collection: training_sessions
+    // Fields: uid, workoutId, date, completed
+    // ===============================================================
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "onegretedesign@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isDocOwner() {
+      return isAuthenticated() && request.auth.uid == resource.data.uid;
+    }
+
+    function isRequestOwner() {
+      return isAuthenticated() && request.auth.uid == request.resource.data.uid;
+    }
+
+    // Validators
+    function isValidUser(data) {
+      return data.uid == request.auth.uid &&
+             (data.email == null || data.email is string) &&
+             (data.name == null || data.name is string);
+    }
+
+    function isValidWorkout(data) {
+      return data.uid == request.auth.uid &&
+             data.title is string && data.title.size() > 0 && data.title.size() < 100 &&
+             data.muscleGroup is string &&
+             data.exercises is list;
+    }
+
+    function isValidHealthLog(data) {
+      return data.uid == request.auth.uid &&
+             (data.weight == null || data.weight is number) &&
+             (data.glucose == null || data.glucose is number) &&
+             data.date is string;
+    }
+
+    function isValidSession(data) {
+      return data.uid == request.auth.uid &&
+             data.workoutId is string &&
+             data.date is string &&
+             data.completed is bool &&
+             (!('reminderTime' in data) || data.reminderTime is string);
+    }
+
+    // Rules
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data);
+    }
+
+    match /workouts/{workoutId} {
+      allow read: if isDocOwner();
+      allow create: if isRequestOwner() && isValidWorkout(request.resource.data);
+      allow update: if isDocOwner() && isRequestOwner() && isValidWorkout(request.resource.data);
+      allow delete: if isDocOwner();
+    }
+
+    match /health_logs/{logId} {
+      allow read: if isDocOwner();
+      allow create: if isRequestOwner() && isValidHealthLog(request.resource.data);
+      allow update: if isDocOwner() && isRequestOwner() && isValidHealthLog(request.resource.data);
+      allow delete: if isDocOwner();
+    }
+
+    match /training_sessions/{sessionId} {
+      allow read: if isDocOwner();
+      allow create: if isRequestOwner() && isValidSession(request.resource.data);
+      allow update: if isDocOwner() && isRequestOwner() && isValidSession(request.resource.data);
+      allow delete: if isDocOwner();
+    }
+  }
+}
